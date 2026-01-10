@@ -1,0 +1,75 @@
+template:
+  - sensor:
+      - name: "Energie Verbruik (totaal)"
+        unique_id: evbt
+        unit_of_measurement: "W"
+        state: >
+          {{ states('sensor.home_power_consumption') | float(0) - states('sensor.home_power_production') | float(0) }}
+
+      - name: "Energie opwekking"
+        unique_id: "92101a80-3c82-4cda-b879-36ff52a5ae4f"
+        unit_of_measurement: "W"
+        state: >
+          {{ states('sensor.pv_now') | float(0) * 1000 }}
+
+      - name: "PV totaal nu"
+        unique_id: "9d1c6a1f-5ba7-4e51-9164-c5a9cea6f51b"
+        unit_of_measurement: "W"
+        state: >
+          {{ states('sensor.solar_power_production') | float(0) | round(0) }}
+
+      - name: "Keuken totaal nu"
+        unique_id: "e01dbcac-daec-43d2-a73d-25af88960af9"
+        unit_of_measurement: "W"
+        state: >
+          {{ 
+            states('sensor.airfryer_power') | float(0) | round(0) + 
+            states('sensor.grillplaat_power') | float(0) | round(0) +
+            states('sensor.zigbee_plug_3_power') | float(0) | round(0) +
+            states('sensor.wasmachien_power') | float(0) | round(0) +
+            states('sensor.vaatwasser_power') | float(0) | round(0)
+          }}
+
+      - name: "Koken totaal nu"
+        unique_id: "4c3606f6-c647-4b50-81e7-d08fc3783f82"
+        unit_of_measurement: "W"
+        state: >
+          {{ 
+            states('sensor.zigbee_plug_2_power') | float(0) | round(0) + 
+            states('sensor.zigbee_plug_4_power') | float(0) | round(0)
+          }}
+
+      - name: "Verwarming totaal nu"
+        unique_id: "4c8f8fc0-e72a-4cb2-ac9f-f1981cd601ad"
+        unit_of_measurement: "W"
+        state: >
+          {{ 
+            states('sensor.shelly_1_pm_wit_power') | float(0) | round(0) +
+            states('sensor.verwarming_zwart_power') | float(0) | round(0) +
+            states('sensor.ir_paneel_groot_power') | float(0) | round(0) +
+            states('sensor.smartplug_cv_vermogen') | float(0) | round(0)
+          }}
+
+      - name: "Schuur totaal nu"
+        unique_id: "fc3c6752-c1a8-44e4-a6bc-18ac290bf415"
+        unit_of_measurement: "W"
+        state: >
+          {{ 
+            states('sensor.vijverpomp_tapo_huidig_gebruik') | float(0) | round(0) +
+            states('sensor.shellyplug_s_0d27ae_power') | float(0) | round(0)
+          }}
+
+      - name: "Hal boven Brightness"
+        state: "{{ state_attr('light.lidl_hal_boven', 'brightness') }}"
+
+      - name: "Toilet Brightness"
+        state: "{{ state_attr('light.lidl_toilet', 'brightness') }}"
+
+      - name: "verschil temperatuur"
+        unit_of_measurement: "°C"
+        state: >
+          {% set tempbi = states('sensor.zigbee_tuin_temperature') %} 
+          {% set tempbu = states('sensor.zigbee_temp_woonkamer_temperature')%} 
+          {% set tempvers = (tempbi |float - tempbu |float) | round(2)%}
+          {{tempvers}}
+# config-yaml
