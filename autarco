@@ -1,0 +1,30 @@
+#Zonnepanelen autarco
+rest:
+  - authentication: basic
+    username: gertvanwijk10@gmail.com
+    password: internet
+    scan_interval: 60
+    resource: https://my.autarco.com/api/m1/site/ui7cqh63/power
+    sensor:
+      - name: "pv_now"
+        value_template: "{{ value_json.stats.kpis.pv_now/1000 }}"
+        unit_of_measurement: "kWh"
+        device_class: energy
+  - authentication: basic
+    username: gertvanwijk10@gmail.com
+    password: internet
+    scan_interval: 60
+    resource: https://my.autarco.com/api/m1/site/ui7cqh63/energy
+    sensor:
+      - name: "pv_today"
+        value_template: "{{ value_json.stats.kpis.pv_today }}"
+        unit_of_measurement: "kWh"
+        device_class: energy
+      - name: "pv_month"
+        value_template: "{{ value_json.stats.kpis.pv_month }}"
+        unit_of_measurement: "kWh"
+        device_class: energy
+      - name: "pv_to_date"
+        value_template: "{{ value_json.stats.kpis.pv_to_date }}"
+        unit_of_measurement: "kWh"
+        device_class: energy
